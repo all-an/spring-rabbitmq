@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_proposal")
-public class Proposal {
+public class ProposalEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,6 @@ public class Proposal {
 	
 	@OneToOne
 	@JoinColumn(name = "id_account")
-	private Account account;
+	private AccountEntity accountEntity;
 
 }

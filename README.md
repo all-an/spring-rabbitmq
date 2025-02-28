@@ -7,6 +7,18 @@ spring-rabbitmq
 docker run -d -p 80:80 --name proposta-web-container matheuspieropan/proposta-web
 ```
 
+### Open on your browser:
+
+```
+localhost:80
+```
+
+## Stop a container:
+
+```
+docker stop container_name
+```
+
 ## Run database container:
 
 ```
@@ -16,7 +28,7 @@ docker run --name postgres-container -d -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=
 ## Remove contaier:
 
 ```
-docker remove <contaier-name>
+docker remove contaier-name
 ```
 
 ### See docker containers:

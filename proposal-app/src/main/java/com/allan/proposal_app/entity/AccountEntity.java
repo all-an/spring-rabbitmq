@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_account")
-public class Account {
+public class AccountEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,6 @@ public class Account {
 	
 	@OneToOne
 	@JoinColumn(name = "account")
-	private Proposal proposal;
+	private ProposalEntity proposalEntity;
 
 }
