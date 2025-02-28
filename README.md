@@ -13,6 +13,12 @@ docker run -d -p 80:80 --name proposta-web-container matheuspieropan/proposta-we
 docker run --name postgres-container -d -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=dockerproposaldb -p 5433:5432 postgres
 ```
 
+## Remove contaier:
+
+```
+docker remove <contaier-name>
+```
+
 ### See docker containers:
 
 ```
