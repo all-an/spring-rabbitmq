@@ -17,12 +17,6 @@ public class ProposalResponseDto {
 	
 	private String surName;
 	
-	//private String phone;
-	
-	//private String cpf;
-	
-	//private Double income;
-	
 	private Double proposalValue;
 	
 	private int paymentLimitInMonths;

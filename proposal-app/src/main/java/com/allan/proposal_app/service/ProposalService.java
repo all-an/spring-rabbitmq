@@ -15,6 +15,9 @@ public class ProposalService {
 	private ProposalRepository proposalRepository;
 	
 	public ProposalResponseDto create(ProposalRequestDto proposalRequestDto) {
+		if (proposalRequestDto == null) {
+			throw new RuntimeException("proposalRequestDto is required");
+		}
 		proposalRepository.save(new ProposalEntity());
 		return null;
 	}
