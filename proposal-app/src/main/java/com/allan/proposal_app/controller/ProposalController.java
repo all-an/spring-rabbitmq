@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
 import com.allan.proposal_app.service.ProposalService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @AllArgsConstructor
 @RestController
@@ -21,7 +22,10 @@ public class ProposalController {
 	@PostMapping
 	public ResponseEntity<ProposalResponseDto> create(@RequestBody ProposalRequestDto requestDto) {
 		ProposalResponseDto responseDto = proposalService.create(requestDto);
-		return ResponseEntity.ok(responseDto);
+		return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(responseDto.getId())
+				.toUri()).body(responseDto);
 	}
 
 }

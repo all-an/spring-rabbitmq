@@ -19,10 +19,16 @@ localhost:80
 docker stop container_name
 ```
 
-## Run database container:
+## Run database container if not created:
 
 ```
 docker run --name postgres-container -d -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=dockerproposaldb -p 5433:5432 postgres
+```
+
+## Run database container if already created:
+
+```
+docker start postgres-container
 ```
 
 ## Remove contaier:
