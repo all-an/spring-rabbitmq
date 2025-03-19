@@ -8,6 +8,7 @@ class ProposalEntityAppApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// necessary: docker start postgres-container
 	}
 
 }

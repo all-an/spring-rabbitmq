@@ -2,8 +2,12 @@ package com.allan.proposal_app.converter;
 
 import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
+import com.allan.proposal_app.entity.AccountEntity;
 import com.allan.proposal_app.entity.ProposalEntity;
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,6 +50,9 @@ public class ProposalConverterTest {
         proposalEntity.setProposalValue(10000.0);
         proposalEntity.setPaymentLimitInMonths(12);
         proposalEntity.setWasApproved(true);
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setName("test");
+        proposalEntity.setAccountEntity(accountEntity);
 
         ProposalResponseDto result = converter.convertProposalEntityToProposalResponseDto(proposalEntity);
 

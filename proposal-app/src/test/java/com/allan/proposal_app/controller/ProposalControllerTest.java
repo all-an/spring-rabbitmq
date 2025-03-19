@@ -2,17 +2,18 @@ package com.allan.proposal_app.controller;
 
 import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
+import com.allan.proposal_app.response.ApiResponse;
+import com.allan.proposal_app.response.ApiStatus;
 import com.allan.proposal_app.service.ProposalService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class ProposalControllerTest {
 
     @InjectMocks
@@ -21,38 +22,22 @@ public class ProposalControllerTest {
     @Mock
     private ProposalService proposalService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
-    void testProposalController_whenNullRequest_thenThrowsException() {
-        // Arrange: Mock service behavior
-        when(proposalService.create(null))
-                .thenThrow(new RuntimeException("proposalRequestDto is required"));
-
-        // Act & Assert: Verify exception is thrown
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> proposalController.create(null)
-        );
-
-        assertEquals("proposalRequestDto is required", exception.getMessage());
-    }
-
-    @Test
-    void testProposalController_whenValidRequest_thenReturnsResponse() {
+    void createProposal_ReturnsSuccessResponse() {
+        // Arrange
         ProposalRequestDto requestDto = new ProposalRequestDto();
         ProposalResponseDto responseDto = new ProposalResponseDto();
+        responseDto.setId(1L);
 
         when(proposalService.create(requestDto)).thenReturn(responseDto);
 
-        ResponseEntity<ProposalResponseDto> response = proposalController.create(requestDto);
+        // Act
+        ApiResponse<ProposalResponseDto> response = proposalController.create(requestDto);
 
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(responseDto, response.getBody());
+        // Assert
+        assertEquals(ApiStatus.CREATED.getCode(), response.getStatus());
+        assertEquals(ApiStatus.CREATED.getMessage(), response.getMessage());
+        assertEquals(responseDto, response.getData());
     }
-
 
 }

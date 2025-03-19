@@ -4,7 +4,6 @@ import com.allan.proposal_app.entity.ProposalEntity;
 import com.allan.proposal_app.converter.ProposalConverter;
 import com.allan.proposal_app.repository.ProposalRepository;
 import lombok.AllArgsConstructor;
-import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
