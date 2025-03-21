@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class ProposalService {
@@ -27,6 +30,15 @@ public class ProposalService {
 				convertProposalRequestDtoToProposalEntity(proposalRequestDto);
 		proposalRepository.save(proposalEntityResult);
 		return proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
+	}
+
+	public List<ProposalResponseDto> getProposals(int page, int size) {
+		int offset = page * size; // Calculate offset based on page number and size
+		List<ProposalEntity> proposals = proposalRepository.findProposalsWithPagination(offset, size);
+
+		return proposals.stream()
+				.map(proposalConverter::convertProposalEntityToProposalResponseDto)
+				.collect(Collectors.toList());
 	}
 
 }
