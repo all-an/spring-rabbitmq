@@ -23,7 +23,25 @@ public class ProposalControllerTest {
     private ProposalService proposalService;
 
     @Test
-    void createProposal_ReturnsSuccessResponse() {
+    void createProposal_ReturnsCreatedResponse() {
+        // Arrange
+        ProposalRequestDto requestDto = new ProposalRequestDto();
+        ProposalResponseDto responseDto = new ProposalResponseDto();
+        responseDto.setId(1L);
+
+        when(proposalService.create(requestDto)).thenReturn(responseDto);
+
+        // Act
+        ApiResponse<ProposalResponseDto> response = proposalController.create(requestDto);
+
+        // Assert
+        assertEquals(ApiStatus.CREATED.getCode(), response.getStatus());
+        assertEquals(ApiStatus.CREATED.getMessage(), response.getMessage());
+        assertEquals(responseDto, response.getData());
+    }
+
+    @Test
+    void getProposals_ReturnsSuccessResponse() {
         // Arrange
         ProposalRequestDto requestDto = new ProposalRequestDto();
         ProposalResponseDto responseDto = new ProposalResponseDto();

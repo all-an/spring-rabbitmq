@@ -13,10 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ProposalServiceTest {
 
@@ -55,6 +59,7 @@ public class ProposalServiceTest {
         requestDto.setIncome(5000.0);
 
         ProposalEntity proposalEntity = new ProposalEntity();
+        proposalEntity.setId(3L);
         proposalEntity.setProposalValue(requestDto.getProposalValue());
         proposalEntity.setPaymentLimitInMonths(requestDto.getPaymentLimitInMonths());
         proposalEntity.setWasApproved(true);
@@ -66,6 +71,7 @@ public class ProposalServiceTest {
         proposalEntity.setAccountEntity(accountEntity);
 
         ProposalResponseDto proposalResponseDto = new ProposalResponseDto();
+        proposalResponseDto.setId(proposalEntity.getId());
         proposalResponseDto.setName(proposalEntity.getAccountEntity().getName());
         proposalResponseDto.setSurName(proposalEntity.getAccountEntity().getSurName());
         proposalResponseDto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
@@ -75,14 +81,17 @@ public class ProposalServiceTest {
         when(proposalConverter.convertProposalRequestDtoToProposalEntity(requestDto)).thenReturn(proposalEntity);
         when(proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntity)).thenReturn(proposalResponseDto);
 
-        proposalService.create(requestDto);
+        ProposalResponseDto result = proposalService.create(requestDto);
 
         ArgumentCaptor<ProposalEntity> proposalEntityArgumentCaptor = ArgumentCaptor.forClass(ProposalEntity.class);
         verify(proposalRepository).save(proposalEntityArgumentCaptor.capture());
 
         ProposalEntity capturedEntity = proposalEntityArgumentCaptor.getValue();
 
-        // Assert: Verify the saved entity contains expected values
+        assertNotNull(result);
+        assertEquals(proposalEntity.getId(), result.getId());
+        assertEquals(proposalEntity.getWasApproved(), result.getWasApproved());
+        assertEquals(accountEntity.getName(), result.getName());
         assertNotNull(capturedEntity);
         assertEquals(requestDto.getProposalValue(), capturedEntity.getProposalValue());
         assertEquals(requestDto.getPaymentLimitInMonths(), capturedEntity.getPaymentLimitInMonths());
@@ -91,6 +100,37 @@ public class ProposalServiceTest {
         assertEquals(requestDto.getSurName(), capturedEntity.getAccountEntity().getSurName());
         assertEquals(requestDto.getCpf(), capturedEntity.getAccountEntity().getCpf());
         assertEquals(requestDto.getIncome(), capturedEntity.getAccountEntity().getIncome());
+    }
+
+    @Test
+    void testGetProposals() {
+        int page = 1;
+        int size = 1;
+        int offset = page * size;
+
+        List<ProposalEntity> mockEntities = new ArrayList<>();
+        ProposalEntity proposalEntity1 = new ProposalEntity();
+        proposalEntity1.setProposalValue(3.5);
+        mockEntities.add(proposalEntity1);
+
+        when(proposalRepository.findProposalsWithPagination(offset, size)).thenReturn(mockEntities);
+
+        // Mocking conversion
+        ProposalResponseDto proposalResponseDto1 = new ProposalResponseDto();
+        proposalResponseDto1.setProposalValue(proposalEntity1.getProposalValue());
+
+        when(proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntity1))
+                .thenReturn(proposalResponseDto1);
+
+        // Calling service method
+        List<ProposalResponseDto> result = proposalService.getProposals(page, size);
+
+        // Verifications
+        assertNotNull(result);
+        assertEquals(proposalEntity1.getProposalValue(), result.get(0).getProposalValue());
+        assertEquals(size, result.size());
+        verify(proposalRepository, times(1)).findProposalsWithPagination(offset, size);
+        verify(proposalConverter, times(size)).convertProposalEntityToProposalResponseDto(any(ProposalEntity.class));
     }
 
 }

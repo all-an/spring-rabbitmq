@@ -24,7 +24,7 @@ public class ProposalController {
 		return new ApiResponse<>(ApiStatus.CREATED, responseDto);
 	}
 
-	@GetMapping // example: GET /proposals?page=0&size=10
+	@GetMapping // example: GET /proposal?page=0&size=10
 	public ApiResponse<List<ProposalResponseDto>> getProposals(
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size
