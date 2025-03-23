@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -43,19 +46,20 @@ public class ProposalControllerTest {
     @Test
     void getProposals_ReturnsSuccessResponse() {
         // Arrange
-        ProposalRequestDto requestDto = new ProposalRequestDto();
         ProposalResponseDto responseDto = new ProposalResponseDto();
         responseDto.setId(1L);
+        List<ProposalResponseDto> proposalResponseDtos = new ArrayList<>();
+        proposalResponseDtos.add(responseDto);
 
-        when(proposalService.create(requestDto)).thenReturn(responseDto);
+        when(proposalService.getProposals(0, 10)).thenReturn(proposalResponseDtos);
 
         // Act
-        ApiResponse<ProposalResponseDto> response = proposalController.create(requestDto);
+        ApiResponse<List<ProposalResponseDto>> response = proposalController.getProposals(0, 10);
 
         // Assert
-        assertEquals(ApiStatus.CREATED.getCode(), response.getStatus());
-        assertEquals(ApiStatus.CREATED.getMessage(), response.getMessage());
-        assertEquals(responseDto, response.getData());
+        assertEquals(ApiStatus.SUCCESS.getCode(), response.getStatus());
+        assertEquals(ApiStatus.SUCCESS.getMessage(), response.getMessage());
+        assertEquals(responseDto, response.getData().get(0));
     }
 
 }
