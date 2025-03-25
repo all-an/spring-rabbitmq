@@ -17,7 +17,7 @@ public class ProposalResponseDto {
 	
 	private String surName;
 	
-	private Double proposalValue;
+	private String proposalValue;
 	
 	private int paymentLimitInMonths;
 	

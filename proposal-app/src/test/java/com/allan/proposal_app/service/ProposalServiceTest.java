@@ -75,7 +75,7 @@ public class ProposalServiceTest {
         proposalResponseDto.setName(proposalEntity.getAccountEntity().getName());
         proposalResponseDto.setSurName(proposalEntity.getAccountEntity().getSurName());
         proposalResponseDto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
-        proposalResponseDto.setProposalValue(proposalEntity.getProposalValue());
+        proposalResponseDto.setProposalValue(String.valueOf(proposalEntity.getProposalValue()));
         proposalResponseDto.setWasApproved(proposalEntity.getWasApproved());
 
         when(proposalConverter.convertProposalRequestDtoToProposalEntity(requestDto)).thenReturn(proposalEntity);
@@ -117,7 +117,7 @@ public class ProposalServiceTest {
 
         // Mocking conversion
         ProposalResponseDto proposalResponseDto1 = new ProposalResponseDto();
-        proposalResponseDto1.setProposalValue(proposalEntity1.getProposalValue());
+        proposalResponseDto1.setProposalValue(String.valueOf(proposalEntity1.getProposalValue()));
 
         when(proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntity1))
                 .thenReturn(proposalResponseDto1);
@@ -127,7 +127,7 @@ public class ProposalServiceTest {
 
         // Verifications
         assertNotNull(result);
-        assertEquals(proposalEntity1.getProposalValue(), result.get(0).getProposalValue());
+        assertEquals(proposalEntity1.getProposalValue().toString(), result.get(0).getProposalValue());
         assertEquals(size, result.size());
         verify(proposalRepository, times(1)).findProposalsWithPagination(offset, size);
         verify(proposalConverter, times(size)).convertProposalEntityToProposalResponseDto(any(ProposalEntity.class));

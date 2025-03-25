@@ -6,6 +6,8 @@ import com.allan.proposal_app.entity.AccountEntity;
 import com.allan.proposal_app.entity.ProposalEntity;
 import org.springframework.stereotype.Component;
 
+import java.text.NumberFormat;
+
 @Component
 public class ProposalConverter {
 
@@ -37,7 +39,7 @@ public class ProposalConverter {
         proposalResponseDto.setName(proposalEntity.getAccountEntity().getName());
         proposalResponseDto.setSurName(proposalEntity.getAccountEntity().getSurName());
         proposalResponseDto.setWasApproved(proposalEntity.getWasApproved());
-        proposalResponseDto.setProposalValue(proposalEntity.getProposalValue());
+        proposalResponseDto.setProposalValue(NumberFormat.getNumberInstance().format(proposalEntity.getProposalValue()));
         proposalResponseDto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
         proposalResponseDto.setObservation(proposalEntity.getObservation());
 
