@@ -14,6 +14,28 @@ Click on send button to send messages from the producers, you will see that queu
 
 ![image](https://github.com/user-attachments/assets/a1269651-66a0-4bfe-b122-46623879bf13)
 
+## Run Rabbitmq docker container:
+
+```
+docker run -d -p 5672:5672 -p 15672:15672 --name my-rabbit rabbitmq:3-management
+```
+
+### Understanding the command:
+
+```
+docker run -d
+# Initialize the container on detached mode. Run the container and free the terminal for use
+
+-p 5672:5672 -p 15672:15672
+# Redirecting port 5672 to 5672. Works like a mapping to 15672
+
+--name my-rabbit
+# This is the name of the container
+
+rabbitmq:3-management
+# This is the image itself
+
+```
 ## Run database container if not created:
 
 ```
