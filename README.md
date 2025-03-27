@@ -1,6 +1,13 @@
 # spring-rabbitmq
 spring-rabbitmq
 
+## Example of rabbitmq consumer in action:
+
+https://tryrabbitmq.com/
+
+![image](https://github.com/user-attachments/assets/f8fc6d61-00db-47ff-ba8c-b3fc6413c994)
+
+
 ## Run database container if not created:
 
 ```
