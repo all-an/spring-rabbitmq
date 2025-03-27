@@ -5,10 +5,9 @@ spring-rabbitmq
 
 https://tryrabbitmq.com/
 
-Create this simulation example, send those 20 messages and link the 'yellow' consumer to the 20 messages queue:
+In the example down below, 'new_proposals_queue' does have 8 messages, if you link using shift to the consumer 'credit_analysis_consumer' , it will consume those messages in the queue.
 
-![image](https://github.com/user-attachments/assets/0674dfda-77ed-4470-b8c8-005938eae045)
-
+![image](https://github.com/user-attachments/assets/a3d231e1-5f10-41ca-a176-c62c81849606)
 
 ## Run database container if not created:
 
