@@ -5,8 +5,9 @@ spring-rabbitmq
 
 https://tryrabbitmq.com/
 
-![image](https://github.com/user-attachments/assets/5f99b21a-c2a1-4ed9-959d-27d603d1b689)
+Create this simulation example, send those 20 messages and link the 'yellow' consumer to the 20 messages queue:
 
+![image](https://github.com/user-attachments/assets/0674dfda-77ed-4470-b8c8-005938eae045)
 
 
 ## Run database container if not created:
