@@ -5,7 +5,8 @@ spring-rabbitmq
 
 https://tryrabbitmq.com/
 
-![image](https://github.com/user-attachments/assets/f8fc6d61-00db-47ff-ba8c-b3fc6413c994)
+![image](https://github.com/user-attachments/assets/5f99b21a-c2a1-4ed9-959d-27d603d1b689)
+
 
 
 ## Run database container if not created:
