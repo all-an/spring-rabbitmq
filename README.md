@@ -3,9 +3,12 @@ spring-rabbitmq
 
 ## Example of rabbitmq consumer in action:
 
+Use this website to simulate the image example below:
 https://tryrabbitmq.com/
 
-In the example down below, 'new_proposals_queue' does have 8 messages, if you link using shift to the consumer 'credit_analysis_consumer' , it will consume those messages in the queue.
+credits and thanks for the simulator: https://github.com/videlalvaro
+
+In the example down below, 'new_proposals_queue' does have 8 messages, if you link (using shift on your keyboard) to the consumer 'credit_analysis_consumer' , it will consume those messages in the queue.
 
 ![image](https://github.com/user-attachments/assets/a3d231e1-5f10-41ca-a176-c62c81849606)
 
