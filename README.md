@@ -27,7 +27,9 @@ docker run -d
 # Initialize the container on detached mode. Run the container and free the terminal for use
 
 -p 5672:5672 -p 15672:15672
-# Redirecting port 5672 to 5672. Works like a mapping to 15672
+# Redirecting port 5672 to 15672. Works like a mapping to 15672
+# to open the container go to http://localhost:15672/#/
+# user: guest  /  password: guest
 
 --name my-rabbit
 # This is the name of the container
@@ -36,10 +38,20 @@ rabbitmq:3-management
 # This is the image itself
 
 ```
+
+## Add this configuration to your application.properties for the Rabbitmq:
+
+```
+spring.rabbitmq.host=localhost
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+```
+
 ## Run database container if not created:
 
 ```
-docker run --name postgres-container -d -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=dockerproposaldb -p 5433:5432 postgres
+docker run -d --name postgres-container -d -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=dockerproposaldb -p 5433:5432 postgres
 ```
 
 ## Run database container if already created:
