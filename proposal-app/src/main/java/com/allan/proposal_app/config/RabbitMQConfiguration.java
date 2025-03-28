@@ -1,7 +1,6 @@
 package com.allan.proposal_app.config;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -46,6 +45,23 @@ public class RabbitMQConfiguration {
     @Bean
     public Queue createFinishedProposalNotificationQueue() {
         return QueueBuilder.durable("finished-proposal.ms-notification").build();
+    }
+
+    @Bean
+    public FanoutExchange createFanoutExchangePendingProposal() {
+        return ExchangeBuilder.fanoutExchange("pending-proposal.ex").build();
+    }
+
+    @Bean
+    public Binding createBindingPendingProposalCreditAnalysis() {
+        return BindingBuilder.bind(createPendingProposalQueue())
+                .to(createFanoutExchangePendingProposal());
+    }
+
+    @Bean
+    public Binding createBindingPendingProposalNotification() {
+        return BindingBuilder.bind(createNotificationQueue())
+                .to(createFanoutExchangePendingProposal());
     }
 
 }

@@ -18,6 +18,11 @@ Click on send button to send messages from the producers, you will see that queu
 
 ```
 docker run -d -p 5672:5672 -p 15672:15672 --name my-rabbit rabbitmq:3-management
+
+# after this just run:
+
+docker start my-rabbit
+
 ```
 
 ### Understanding the command:
