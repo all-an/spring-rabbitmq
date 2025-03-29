@@ -19,6 +19,8 @@ public class ProposalService {
 
 	private ProposalRepository proposalRepository;
 
+	private NotificationService notificationService;
+
 	@Autowired
 	private ProposalConverter proposalConverter;
 	
@@ -29,7 +31,12 @@ public class ProposalService {
 		ProposalEntity proposalEntityResult = proposalConverter.
 				convertProposalRequestDtoToProposalEntity(proposalRequestDto);
 		proposalRepository.save(proposalEntityResult);
-		return proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
+
+		ProposalResponseDto proposalResponseDto = proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
+
+		notificationService.notify(proposalResponseDto, "pending-proposal.ex");
+
+		return proposalResponseDto;
 	}
 
 	public List<ProposalResponseDto> getProposals(int page, int size) {

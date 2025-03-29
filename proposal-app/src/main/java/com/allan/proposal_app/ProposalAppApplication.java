@@ -15,6 +15,9 @@ public class ProposalAppApplication {
 	@Autowired
 	private Locale locale;
 
+	@Autowired
+	private String something;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProposalAppApplication.class, args);
 	}
@@ -29,6 +32,7 @@ public class ProposalAppApplication {
 			double someValue = Double.parseDouble("10.50");
 			System.out.println(NumberFormat.getCurrencyInstance(locale).format(someValue));
 			System.out.println(locale);
+			System.out.println(something);
 		};
 	}
 
