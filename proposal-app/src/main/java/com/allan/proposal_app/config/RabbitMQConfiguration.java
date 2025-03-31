@@ -5,6 +5,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,21 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
+
+    @Value("${rabbitmq.pendingproposal.exchange}")
+    private String exchange;
+
+    @Value("${queue.ms-credit-analysis}")
+    private String queueCreditAnalysis;
+
+    @Value("${queue.pending-proposal.ms-notification}")
+    private String queuePendingProposalNotification;
+
+    @Value("${queue.finished-proposal.ms-proposal}")
+    private String queueFinishedProposal;
+
+    @Value("${queue.finished-proposal.ms-notification}")
+    private String queueFinishedProposalNotification;
 
     private ConnectionFactory connectionFactory;
 
@@ -31,27 +47,27 @@ public class RabbitMQConfiguration {
 
     @Bean
     public Queue createPendingProposalQueue() {
-        return QueueBuilder.durable("pending-proposal.ms-credit-analysis").build();
+        return QueueBuilder.durable(queueCreditAnalysis).build();
     }
 
     @Bean
     public Queue createNotificationQueue() {
-        return QueueBuilder.durable("pending-proposal.ms-notification").build();
+        return QueueBuilder.durable(queuePendingProposalNotification).build();
     }
 
     @Bean
     public Queue createFinishedProposalQueue() {
-        return QueueBuilder.durable("finished-proposal.ms-proposal").build();
+        return QueueBuilder.durable(queueFinishedProposal).build();
     }
 
     @Bean
     public Queue createFinishedProposalNotificationQueue() {
-        return QueueBuilder.durable("finished-proposal.ms-notification").build();
+        return QueueBuilder.durable(queueFinishedProposalNotification).build();
     }
 
     @Bean
     public FanoutExchange createFanoutExchangePendingProposal() {
-        return ExchangeBuilder.fanoutExchange("pending-proposal.ex").build();
+        return ExchangeBuilder.fanoutExchange(exchange).build();
     }
 
     @Bean

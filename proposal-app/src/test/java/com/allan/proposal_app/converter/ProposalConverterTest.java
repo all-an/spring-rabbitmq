@@ -4,16 +4,30 @@ import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
 import com.allan.proposal_app.entity.AccountEntity;
 import com.allan.proposal_app.entity.ProposalEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 public class ProposalConverterTest {
 
-    private final ProposalConverter converter = new ProposalConverter();
+    @Mock
+    private NumberFormatHelper numberFormatHelper;
+
+    @InjectMocks
+    private ProposalConverter converter;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void testConvertProposalRequestDtoToProposalEntity_Success() {
@@ -30,6 +44,7 @@ public class ProposalConverterTest {
         assertNotNull(result);
         assertEquals(10000, result.getProposalValue());
         assertEquals(12, result.getPaymentLimitInMonths());
+        assertTrue(result.isIntegrated());
         assertNotNull(result.getAccountEntity());
         assertEquals("John", result.getAccountEntity().getName());
         assertEquals("Doe", result.getAccountEntity().getSurName());
@@ -54,10 +69,12 @@ public class ProposalConverterTest {
         accountEntity.setName("test");
         proposalEntity.setAccountEntity(accountEntity);
 
+        when(numberFormatHelper.format(proposalEntity.getProposalValue())).thenReturn(proposalEntity.getProposalValue().toString());
+
         ProposalResponseDto result = converter.convertProposalEntityToProposalResponseDto(proposalEntity);
 
         assertNotNull(result);
-        assertEquals(10000, result.getProposalValue());
+        assertEquals(proposalEntity.getProposalValue().toString(), result.getProposalValue());
         assertTrue(result.getWasApproved());
     }
 

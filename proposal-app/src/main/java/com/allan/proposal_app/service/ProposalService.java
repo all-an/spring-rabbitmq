@@ -3,8 +3,8 @@ package com.allan.proposal_app.service;
 import com.allan.proposal_app.entity.ProposalEntity;
 import com.allan.proposal_app.converter.ProposalConverter;
 import com.allan.proposal_app.repository.ProposalRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.allan.proposal_app.dto.ProposalRequestDto;
@@ -13,7 +13,6 @@ import com.allan.proposal_app.dto.ProposalResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
 public class ProposalService {
 
@@ -23,7 +22,19 @@ public class ProposalService {
 
 	@Autowired
 	private ProposalConverter proposalConverter;
-	
+
+	private String exchange;
+
+	public ProposalService(ProposalRepository proposalRepository,
+						   NotificationService notificationService,
+						   ProposalConverter proposalConverter,
+						   @Value("${rabbitmq.pendingproposal.exchange}") String exchange) {
+		this.proposalRepository = proposalRepository;
+		this.notificationService = notificationService;
+		this.proposalConverter = proposalConverter;
+		this.exchange = exchange;
+	}
+
 	public ProposalResponseDto create(ProposalRequestDto proposalRequestDto) {
 		if (proposalRequestDto == null) {
 			throw new RuntimeException("proposalRequestDto is required");
@@ -32,11 +43,9 @@ public class ProposalService {
 				convertProposalRequestDtoToProposalEntity(proposalRequestDto);
 		proposalRepository.save(proposalEntityResult);
 
-		ProposalResponseDto proposalResponseDto = proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
+		notifyRabbitMQ(proposalEntityResult);
 
-		notificationService.notify(proposalResponseDto, "pending-proposal.ex");
-
-		return proposalResponseDto;
+        return proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
 	}
 
 	public List<ProposalResponseDto> getProposals(int page, int size) {
@@ -46,6 +55,16 @@ public class ProposalService {
 		return proposals.stream()
 				.map(proposalConverter::convertProposalEntityToProposalResponseDto)
 				.collect(Collectors.toList());
+	}
+
+	private void notifyRabbitMQ(ProposalEntity proposalEntity) {
+		try {
+			notificationService.notify(proposalEntity, exchange);
+		} catch (RuntimeException e) {
+			proposalEntity.setIntegrated(false);
+			proposalRepository.save(proposalEntity);
+			throw new RuntimeException("Proposal not integrated.");
+		}
 	}
 
 }

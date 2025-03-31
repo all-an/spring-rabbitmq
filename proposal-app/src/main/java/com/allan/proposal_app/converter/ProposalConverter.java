@@ -11,6 +11,12 @@ import java.text.NumberFormat;
 @Component
 public class ProposalConverter {
 
+    private final NumberFormatHelper numberFormatHelper;
+
+    public ProposalConverter(NumberFormatHelper numberFormatHelper) {
+        this.numberFormatHelper = numberFormatHelper;
+    }
+
     public ProposalEntity convertProposalRequestDtoToProposalEntity(ProposalRequestDto proposalRequestDto) {
         if (proposalRequestDto == null) {
             throw new RuntimeException("proposalRequestDto is required");
@@ -18,6 +24,7 @@ public class ProposalConverter {
         ProposalEntity proposalEntity = new ProposalEntity();
         proposalEntity.setProposalValue(proposalRequestDto.getProposalValue());
         proposalEntity.setPaymentLimitInMonths(proposalRequestDto.getPaymentLimitInMonths());
+        proposalEntity.setIntegrated(true);
 
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setName(proposalRequestDto.getName());
@@ -34,16 +41,16 @@ public class ProposalConverter {
         if (proposalEntity == null) {
             throw new RuntimeException("proposalEntity is required");
         }
-        ProposalResponseDto proposalResponseDto = new ProposalResponseDto();
-        proposalResponseDto.setId(proposalEntity.getId());
-        proposalResponseDto.setName(proposalEntity.getAccountEntity().getName());
-        proposalResponseDto.setSurName(proposalEntity.getAccountEntity().getSurName());
-        proposalResponseDto.setWasApproved(proposalEntity.getWasApproved());
-        proposalResponseDto.setProposalValue(NumberFormat.getNumberInstance().format(proposalEntity.getProposalValue()));
-        proposalResponseDto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
-        proposalResponseDto.setObservation(proposalEntity.getObservation());
+        ProposalResponseDto dto = new ProposalResponseDto();
+        dto.setId(proposalEntity.getId());
+        dto.setName(proposalEntity.getAccountEntity().getName());
+        dto.setSurName(proposalEntity.getAccountEntity().getSurName());
+        dto.setWasApproved(proposalEntity.getWasApproved());
+        dto.setProposalValue(numberFormatHelper.format(proposalEntity.getProposalValue())); // Injected dependency
+        dto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
+        dto.setObservation(proposalEntity.getObservation());
 
-        return proposalResponseDto;
+        return dto;
     }
 
 }

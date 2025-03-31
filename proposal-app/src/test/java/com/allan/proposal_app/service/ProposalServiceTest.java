@@ -33,9 +33,15 @@ public class ProposalServiceTest {
     @Mock
     private ProposalConverter proposalConverter;
 
+    @Mock
+    private NotificationService notificationService;
+
+    private String exchange = "test-exchange";
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        proposalService = new ProposalService(proposalRepository, notificationService, proposalConverter, exchange);
     }
 
     @Test
@@ -100,6 +106,27 @@ public class ProposalServiceTest {
         assertEquals(requestDto.getSurName(), capturedEntity.getAccountEntity().getSurName());
         assertEquals(requestDto.getCpf(), capturedEntity.getAccountEntity().getCpf());
         assertEquals(requestDto.getIncome(), capturedEntity.getAccountEntity().getIncome());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNotificationFails() {
+        // Arrange
+        ProposalRequestDto requestDto = new ProposalRequestDto();
+        ProposalEntity proposalEntity = new ProposalEntity();
+        when(proposalConverter.convertProposalRequestDtoToProposalEntity(requestDto)).thenReturn(proposalEntity);
+
+        doThrow(new RuntimeException("RabbitMQ error"))
+                .when(notificationService)
+                .notify(proposalEntity, "test-exchange");
+
+        // Act & Assert
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            proposalService.create(requestDto); // create() calls notifyRabbitMQ internally
+        });
+
+        // Verify the entity was updated before rethrowing the exception
+        verify(proposalRepository, times(2)).save(proposalEntity);
+        assertEquals("Proposal not integrated.", thrown.getMessage());
     }
 
     @Test

@@ -24,7 +24,8 @@ public class ProposalEntity {
 	private int paymentLimitInMonths;
 	
 	private Boolean wasApproved;
-	
+
+	@Column(columnDefinition = "boolean default true")
 	private boolean integrated;
 	
 	private String observation;
