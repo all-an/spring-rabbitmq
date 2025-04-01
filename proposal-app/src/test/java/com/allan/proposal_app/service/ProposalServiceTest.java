@@ -15,8 +15,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,14 +32,14 @@ public class ProposalServiceTest {
     private ProposalConverter proposalConverter;
 
     @Mock
-    private NotificationService notificationService;
+    private RabbitMQNotificationService rabbitMQNotificationService;
 
     private String exchange = "test-exchange";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        proposalService = new ProposalService(proposalRepository, notificationService, proposalConverter, exchange);
+        proposalService = new ProposalService(proposalRepository, rabbitMQNotificationService, proposalConverter, exchange);
     }
 
     @Test
@@ -116,7 +114,7 @@ public class ProposalServiceTest {
         when(proposalConverter.convertProposalRequestDtoToProposalEntity(requestDto)).thenReturn(proposalEntity);
 
         doThrow(new RuntimeException("RabbitMQ error"))
-                .when(notificationService)
+                .when(rabbitMQNotificationService)
                 .notify(proposalEntity, "test-exchange");
 
         // Act & Assert

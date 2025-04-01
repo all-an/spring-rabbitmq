@@ -1,5 +1,6 @@
 package com.allan.proposal_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class ProposalEntity {
 	
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "id_account")
+	@JsonManagedReference
 	private AccountEntity accountEntity;
 
 }

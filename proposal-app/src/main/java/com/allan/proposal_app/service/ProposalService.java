@@ -18,7 +18,7 @@ public class ProposalService {
 
 	private ProposalRepository proposalRepository;
 
-	private NotificationService notificationService;
+	private RabbitMQNotificationService rabbitMQNotificationService;
 
 	@Autowired
 	private ProposalConverter proposalConverter;
@@ -26,11 +26,11 @@ public class ProposalService {
 	private String exchange;
 
 	public ProposalService(ProposalRepository proposalRepository,
-						   NotificationService notificationService,
+						   RabbitMQNotificationService rabbitMQNotificationService,
 						   ProposalConverter proposalConverter,
 						   @Value("${rabbitmq.pendingproposal.exchange}") String exchange) {
 		this.proposalRepository = proposalRepository;
-		this.notificationService = notificationService;
+		this.rabbitMQNotificationService = rabbitMQNotificationService;
 		this.proposalConverter = proposalConverter;
 		this.exchange = exchange;
 	}
@@ -59,7 +59,7 @@ public class ProposalService {
 
 	private void notifyRabbitMQ(ProposalEntity proposalEntity) {
 		try {
-			notificationService.notify(proposalEntity, exchange);
+			rabbitMQNotificationService.notify(proposalEntity, exchange);
 		} catch (RuntimeException e) {
 			proposalEntity.setIntegrated(false);
 			proposalRepository.save(proposalEntity);

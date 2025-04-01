@@ -1,5 +1,4 @@
-# spring-rabbitmq
-spring-rabbitmq
+# Spring + RabbitMQ project
 
 ## Example of rabbitmq consumer in action:
 
