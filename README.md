@@ -14,6 +14,11 @@ Click on send button to send messages from the producers, you will see that queu
 
 ![image](https://github.com/user-attachments/assets/a1269651-66a0-4bfe-b122-46623879bf13)
 
+### Direct exchange example:
+
+![image](https://github.com/user-attachments/assets/76beffd0-2bdf-420c-aa83-133b9efadab9)
+
+
 ## Run Rabbitmq docker container:
 
 ```
