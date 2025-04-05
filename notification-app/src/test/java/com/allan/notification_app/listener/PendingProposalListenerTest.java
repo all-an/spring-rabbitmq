@@ -25,6 +25,9 @@ public class PendingProposalListenerTest {
     @Captor
     private ArgumentCaptor<String> messageCaptor;
 
+    @Captor
+    private ArgumentCaptor<String> phoneCaptor;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -35,6 +38,7 @@ public class PendingProposalListenerTest {
         // Arrange
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setName("Test Account");
+        accountEntity.setPhone("989879868");
 
         ProposalEntity proposal = new ProposalEntity();
         proposal.setAccountEntity(accountEntity);
@@ -43,21 +47,23 @@ public class PendingProposalListenerTest {
         pendingProposalListener.pendingProposal(proposal);
 
         // Assert
-        verify(snsNotificationService).notify(messageCaptor.capture());
+        verify(snsNotificationService).notify(phoneCaptor.capture(), messageCaptor.capture());
+        String capturedPhone = phoneCaptor.getValue();
         String capturedMessage = messageCaptor.getValue();
+        assertEquals(accountEntity.getPhone(), capturedPhone);
         assertEquals(String.format(ConstantMessage.PROPOSAL_IN_ANALYSIS, "Test Account"), capturedMessage);
     }
 
     @Test
     public void testPendingProposalWithNullProposal() {
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        RuntimeException exception = assertThrows(IllegalArgumentException.class, () -> {
             pendingProposalListener.pendingProposal(null);
         });
         assertEquals("Proposal is required", exception.getMessage());
 
         // Verify that snsNotificationService is never called
-        verify(snsNotificationService, never()).notify(anyString());
+        verify(snsNotificationService, never()).notify(anyString(), anyString());
     }
 
     @Test
@@ -72,14 +78,14 @@ public class PendingProposalListenerTest {
         });
 
         // Verify that snsNotificationService is never called
-        verify(snsNotificationService, never()).notify(anyString());
+        verify(snsNotificationService, never()).notify(anyString(), anyString());
     }
 
     @Test
     public void testPendingProposalWithProposalHavingNullAccountName() {
         // Arrange
         AccountEntity accountEntity = new AccountEntity();
-        // Name is null
+        // Name and Phone are null
 
         ProposalEntity proposal = new ProposalEntity();
         proposal.setAccountEntity(accountEntity);
@@ -88,9 +94,11 @@ public class PendingProposalListenerTest {
         pendingProposalListener.pendingProposal(proposal);
 
         // Assert
-        verify(snsNotificationService).notify(messageCaptor.capture());
+        verify(snsNotificationService).notify(phoneCaptor.capture(), messageCaptor.capture());
+        String capturedPhone = phoneCaptor.getValue();
         String capturedMessage = messageCaptor.getValue();
         assertEquals(String.format(ConstantMessage.PROPOSAL_IN_ANALYSIS, null), capturedMessage);
+        assertNull(capturedPhone);
     }
 
     @Test
@@ -98,11 +106,12 @@ public class PendingProposalListenerTest {
         // Arrange
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setName("Test Account");
+        accountEntity.setPhone("989879868");
 
         ProposalEntity proposal = new ProposalEntity();
         proposal.setAccountEntity(accountEntity);
 
-        doThrow(new RuntimeException("Service unavailable")).when(snsNotificationService).notify(anyString());
+        doThrow(new RuntimeException("Service unavailable")).when(snsNotificationService).notify(anyString(), anyString());
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -111,8 +120,10 @@ public class PendingProposalListenerTest {
         assertEquals("Service unavailable", exception.getMessage());
 
         // Verify the message was correctly formed before the exception
-        verify(snsNotificationService).notify(messageCaptor.capture());
+        verify(snsNotificationService).notify(phoneCaptor.capture(), messageCaptor.capture());
+        String capturedPhone = phoneCaptor.getValue();
         String capturedMessage = messageCaptor.getValue();
+        assertEquals(accountEntity.getPhone(), capturedPhone);
         assertEquals(String.format(ConstantMessage.PROPOSAL_IN_ANALYSIS, "Test Account"), capturedMessage);
     }
 }
