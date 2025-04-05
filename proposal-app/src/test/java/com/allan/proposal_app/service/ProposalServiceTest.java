@@ -5,6 +5,7 @@ import com.allan.proposal_app.dto.ProposalRequestDto;
 import com.allan.proposal_app.dto.ProposalResponseDto;
 import com.allan.proposal_app.entity.AccountEntity;
 import com.allan.proposal_app.entity.ProposalEntity;
+import com.allan.proposal_app.event.ProposalEventPublisher;
 import com.allan.proposal_app.repository.ProposalRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +35,15 @@ public class ProposalServiceTest {
     @Mock
     private RabbitMQNotificationService rabbitMQNotificationService;
 
+    @Mock
+    private ProposalEventPublisher eventPublisher;
+
     private String exchange = "test-exchange";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        proposalService = new ProposalService(proposalRepository, rabbitMQNotificationService, proposalConverter, exchange);
+        proposalService = new ProposalService(proposalRepository, rabbitMQNotificationService, proposalConverter, exchange, eventPublisher);
     }
 
     @Test

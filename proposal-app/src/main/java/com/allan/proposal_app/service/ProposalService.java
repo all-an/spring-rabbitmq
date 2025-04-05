@@ -2,6 +2,7 @@ package com.allan.proposal_app.service;
 
 import com.allan.proposal_app.entity.ProposalEntity;
 import com.allan.proposal_app.converter.ProposalConverter;
+import com.allan.proposal_app.event.ProposalEventPublisher;
 import com.allan.proposal_app.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,8 @@ public class ProposalService {
 
 	private RabbitMQNotificationService rabbitMQNotificationService;
 
+	private final ProposalEventPublisher eventPublisher;
+
 	@Autowired
 	private ProposalConverter proposalConverter;
 
@@ -28,11 +31,13 @@ public class ProposalService {
 	public ProposalService(ProposalRepository proposalRepository,
 						   RabbitMQNotificationService rabbitMQNotificationService,
 						   ProposalConverter proposalConverter,
-						   @Value("${rabbitmq.pendingproposal.exchange}") String exchange) {
+						   @Value("${rabbitmq.pendingproposal.exchange}") String exchange,
+						   ProposalEventPublisher eventPublisher) {
 		this.proposalRepository = proposalRepository;
 		this.rabbitMQNotificationService = rabbitMQNotificationService;
 		this.proposalConverter = proposalConverter;
 		this.exchange = exchange;
+		this.eventPublisher = eventPublisher;
 	}
 
 	public ProposalResponseDto create(ProposalRequestDto proposalRequestDto) {
@@ -44,6 +49,8 @@ public class ProposalService {
 		proposalRepository.save(proposalEntityResult);
 
 		notifyRabbitMQ(proposalEntityResult);
+
+		eventPublisher.publishProposalCreated(proposalEntityResult);
 
         return proposalConverter.convertProposalEntityToProposalResponseDto(proposalEntityResult);
 	}

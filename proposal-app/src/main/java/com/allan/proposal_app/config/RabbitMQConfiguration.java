@@ -35,6 +35,25 @@ public class RabbitMQConfiguration {
         this.connectionFactory = connectionFactory;
     }
 
+    public static final String EXCHANGE_NAME = "proposal.event.exchange";
+    public static final String QUEUE_NAME = "proposal.event.queue";
+    public static final String ROUTING_KEY = "proposal.event.created";
+
+    @Bean
+    public DirectExchange exchange() {
+        return ExchangeBuilder.directExchange(EXCHANGE_NAME).build();
+    }
+
+    @Bean
+    public Queue eventQueue() {
+        return QueueBuilder.durable(QUEUE_NAME).build();
+    }
+
+    @Bean
+    public Binding createEventBinding() {
+        return BindingBuilder.bind(eventQueue()).to(exchange()).with(ROUTING_KEY);
+    }
+
     @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
