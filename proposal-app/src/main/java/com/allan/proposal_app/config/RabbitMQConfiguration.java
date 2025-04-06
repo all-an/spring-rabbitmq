@@ -15,29 +15,32 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfiguration {
 
     @Value("${rabbitmq.pendingproposal.exchange}")
-    private String exchange;
+    private String exchangePendingProposal;
 
-    @Value("${queue.ms-credit-analysis}")
-    private String queueCreditAnalysis;
+    @Value("${rabbitmq.finishedproposal.exchange}")
+    private String exchangeFinishedProposal;
 
-    @Value("${queue.pending-proposal.ms-notification}")
-    private String queuePendingProposalNotification;
+    @Value("${queue.pending-proposal.to-ms-credit-analysis}")
+    private String queuePendingProposalToCreditAnalysisApp;
 
-    @Value("${queue.finished-proposal.ms-proposal}")
-    private String queueFinishedProposal;
+    @Value("${queue.pending-proposal.to-ms-notification}")
+    private String queuePendingProposalToNotificationApp;
 
-    @Value("${queue.finished-proposal.ms-notification}")
-    private String queueFinishedProposalNotification;
+    @Value("${queue.finished-proposal.to-ms-proposal}")
+    private String queueFinishedProposalToProposalApp;
+
+    @Value("${queue.finished-proposal.to-ms-notification}")
+    private String queueFinishedProposalToNotificationApp;
 
     private ConnectionFactory connectionFactory;
-
-    public RabbitMQConfiguration(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
 
     public static final String EXCHANGE_NAME = "proposal.event.exchange";
     public static final String QUEUE_NAME = "proposal.event.queue";
     public static final String ROUTING_KEY = "proposal.event.created";
+
+    public RabbitMQConfiguration(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     @Bean
     public DirectExchange exchange() {
@@ -65,33 +68,33 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Queue createPendingProposalQueue() {
-        return QueueBuilder.durable(queueCreditAnalysis).build();
+    public Queue createCreditAnalysisQueueToCreditAnalysisApp() {
+        return QueueBuilder.durable(queuePendingProposalToCreditAnalysisApp).build();
     }
 
     @Bean
     public Queue createNotificationQueue() {
-        return QueueBuilder.durable(queuePendingProposalNotification).build();
+        return QueueBuilder.durable(queuePendingProposalToNotificationApp).build();
     }
 
     @Bean
-    public Queue createFinishedProposalQueue() {
-        return QueueBuilder.durable(queueFinishedProposal).build();
+    public Queue createFinishedProposalQueueToProposalApp() {
+        return QueueBuilder.durable(queueFinishedProposalToProposalApp).build();
     }
 
     @Bean
-    public Queue createFinishedProposalNotificationQueue() {
-        return QueueBuilder.durable(queueFinishedProposalNotification).build();
+    public Queue createFinishedProposalQueueToNotificationApp() {
+        return QueueBuilder.durable(queueFinishedProposalToNotificationApp).build();
     }
 
     @Bean
     public FanoutExchange createFanoutExchangePendingProposal() {
-        return ExchangeBuilder.fanoutExchange(exchange).build();
+        return ExchangeBuilder.fanoutExchange(exchangePendingProposal).build();
     }
 
     @Bean
     public Binding createBindingPendingProposalCreditAnalysis() {
-        return BindingBuilder.bind(createPendingProposalQueue())
+        return BindingBuilder.bind(createCreditAnalysisQueueToCreditAnalysisApp())
                 .to(createFanoutExchangePendingProposal());
     }
 
@@ -99,6 +102,35 @@ public class RabbitMQConfiguration {
     public Binding createBindingPendingProposalNotification() {
         return BindingBuilder.bind(createNotificationQueue())
                 .to(createFanoutExchangePendingProposal());
+    }
+
+    @Bean
+    public FanoutExchange createFanoutExchangeFinishedProposal() {
+        return ExchangeBuilder.fanoutExchange(exchangeFinishedProposal).build();
+    }
+
+    /**
+     * Returns the Binding between 'Queue Finished Proposal - Proposal App' and
+     * 'Finished Proposal Exchange'
+     *
+     * @return Binding between the Queue and Exchange described
+     */
+    @Bean
+    public Binding createBindingFinishedProposalProposalApp() {
+        return BindingBuilder.bind(createFinishedProposalQueueToProposalApp())
+                .to(createFanoutExchangeFinishedProposal());
+    }
+
+    /**
+     * Returns the Binding between 'Queue Finished Proposal - Notification App' and
+     * 'Finished Proposal Exchange'
+     *
+     * @return Binding between the Queue and Exchange described
+     */
+    @Bean
+    public Binding createBindingFinishedProposalNotificationApp() {
+        return BindingBuilder.bind(createFinishedProposalQueueToNotificationApp())
+                .to(createFanoutExchangeFinishedProposal());
     }
 
     @Bean

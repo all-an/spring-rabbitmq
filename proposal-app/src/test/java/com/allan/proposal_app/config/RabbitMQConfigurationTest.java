@@ -40,11 +40,11 @@ public class RabbitMQConfigurationTest {
     }
 
     @Test
-    void shouldCreatePendingProposalQueue() {
+    void shouldCreateCreditAnalysisQueueToCreditAnalysisApp() {
         RabbitMQConfiguration configuration = new RabbitMQConfiguration(connectionFactory);
         ReflectionTestUtils.setField(configuration, "queueCreditAnalysis", "pending-proposal.ms-credit-analysis");
 
-        Queue queue = configuration.createPendingProposalQueue();
+        Queue queue = configuration.createCreditAnalysisQueueToCreditAnalysisApp();
         assertThat(queue.getName()).isEqualTo("pending-proposal.ms-credit-analysis");
     }
 
@@ -58,20 +58,20 @@ public class RabbitMQConfigurationTest {
     }
 
     @Test
-    void shouldCreateFinishedProposalQueue() {
+    void shouldCreateFinishedProposalQueueToProposalApp() {
         RabbitMQConfiguration configuration = new RabbitMQConfiguration(connectionFactory);
         ReflectionTestUtils.setField(configuration, "queueFinishedProposal", "finished-proposal.ms-proposal");
 
-        Queue queue = configuration.createFinishedProposalQueue();
+        Queue queue = configuration.createFinishedProposalQueueToProposalApp();
         assertThat(queue.getName()).isEqualTo("finished-proposal.ms-proposal");
     }
 
     @Test
-    void shouldCreateFinishedProposalNotificationQueue() {
+    void shouldCreateFinishedProposalQueueToNotificationApp() {
         RabbitMQConfiguration configuration = new RabbitMQConfiguration(connectionFactory);
         ReflectionTestUtils.setField(configuration, "queueFinishedProposalNotification", "finished-proposal.ms-notification");
 
-        Queue queue = configuration.createFinishedProposalNotificationQueue();
+        Queue queue = configuration.createFinishedProposalQueueToNotificationApp();
         assertThat(queue.getName()).isEqualTo("finished-proposal.ms-notification");
     }
 
