@@ -1,5 +1,10 @@
 # Spring + RabbitMQ project
 
+## Project visualized:
+
+![image](https://github.com/user-attachments/assets/3a8ffe60-41a4-4648-86e8-3e9fa520ac73)
+
+
 ## Example of rabbitmq consumer in action:
 
 Use this website to simulate the image example below:
