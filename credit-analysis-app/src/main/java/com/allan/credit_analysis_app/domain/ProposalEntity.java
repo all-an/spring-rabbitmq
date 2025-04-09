@@ -1,4 +1,4 @@
-package com.allan.notification_app.domain;
+package com.allan.credit_analysis_app.domain;
 
 import lombok.Getter;
 import lombok.Setter;

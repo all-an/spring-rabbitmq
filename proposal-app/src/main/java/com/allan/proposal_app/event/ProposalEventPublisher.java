@@ -1,6 +1,6 @@
 package com.allan.proposal_app.event;
 
-import com.allan.proposal_app.config.RabbitMQConfiguration;
+import com.allan.proposal_app.config.EventExchangeConfig;
 import com.allan.proposal_app.entity.ProposalEntity;
 import com.allan.proposal_app.response.ApiStatus;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,7 +18,7 @@ public class ProposalEventPublisher {
     public void publishProposalCreated(ProposalEntity proposal) {
         ProposalCreatedEvent event = new ProposalCreatedEvent(proposal.getId(), proposal.getAccountEntity().getId(),
                 ApiStatus.CREATED.getMessage(), proposal.getAccountEntity().getName(), proposal.getAccountEntity().getPhone());
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, RabbitMQConfiguration.ROUTING_KEY, event);
+        rabbitTemplate.convertAndSend(EventExchangeConfig.EXCHANGE_NAME, EventExchangeConfig.ROUTING_KEY, event);
     }
 
 }
