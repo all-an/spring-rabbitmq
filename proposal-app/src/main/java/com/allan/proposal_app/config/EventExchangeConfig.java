@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventExchangeConfig {
 
-    public static final String EXCHANGE_NAME = "proposal.event.exchange";
-    public static final String QUEUE_NAME = "proposal.event.queue";
-    public static final String ROUTING_KEY = "proposal.event.created";
+    public static final String EXCHANGE_NAME = "proposal.event-another-notification.exchange";
+    public static final String QUEUE_NAME = "proposal.event-another-notification.queue";
+    public static final String ROUTING_KEY = "proposal.event-another-notification.created";
 
     @Bean
     public DirectExchange eventExchange() {

@@ -15,7 +15,7 @@ public class DeniedCreditImpl implements CreditPointsCalculation{
         return 100;
     }
 
-    private boolean deniedCredit() {
+    protected boolean deniedCredit() {
         return new Random().nextBoolean();
     }
 

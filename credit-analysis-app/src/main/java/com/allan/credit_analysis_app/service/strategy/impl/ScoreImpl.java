@@ -22,7 +22,7 @@ public class ScoreImpl implements CreditPointsCalculation{
         return 220;
     }
 
-    private int getScore() {
+    protected int getScore() {
         return new Random().nextInt(0, 1000);
     }
 
