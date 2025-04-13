@@ -4,18 +4,14 @@ import com.allan.credit_analysis_app.domain.ProposalEntity;
 import com.allan.credit_analysis_app.service.strategy.CreditPointsCalculation;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
+import static com.allan.credit_analysis_app.exception.NullVerifier.verifyFieldsNotNull;
 
 @Component
-public class AnotherContractsVerifier implements CreditPointsCalculation{
+public class PaymentTermLessThanTenYears implements CreditPointsCalculation {
 
     @Override
     public int calculatePoints(ProposalEntity proposalEntity) {
-        return anotherContractsDetected() ? 0 : 80;
+        verifyFieldsNotNull(proposalEntity, "paymentLimitInMonths");
+        return proposalEntity.getPaymentLimitInMonths() < 120 ? 80 : 0;
     }
-
-    protected boolean anotherContractsDetected() {
-        return new Random().nextBoolean();
-    }
-
 }

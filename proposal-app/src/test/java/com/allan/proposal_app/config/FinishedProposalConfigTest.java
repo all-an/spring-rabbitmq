@@ -24,8 +24,8 @@ public class FinishedProposalConfigTest {
         finishedProposal = mock(RabbitMQProperties.FinishedProposal.class);
 
         when(mockProperties.getFinishedproposal()).thenReturn(finishedProposal);
-        when(finishedProposal.getToMsProposal()).thenReturn("queue.finished.proposal.app");
-        when(finishedProposal.getToMsNotification()).thenReturn("queue.finished.notification.app");
+        when(finishedProposal.getQueueToMsProposal()).thenReturn("queue.finished.proposal.app");
+        when(finishedProposal.getQueueToMsNotification()).thenReturn("queue.finished.notification.app");
         when(finishedProposal.getExchange()).thenReturn("exchange.finished.proposal");
 
         config = new FinishedProposalConfig(mockProperties);

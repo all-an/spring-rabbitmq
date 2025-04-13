@@ -25,8 +25,8 @@ public class PendingProposalConfigTest {
 
         // Setup mock return values
         when(mockProperties.getPendingproposal()).thenReturn(pendingProposal);
-        when(pendingProposal.getToMsCreditAnalysis()).thenReturn("queue.pending.credit.analysis");
-        when(pendingProposal.getToMsNotification()).thenReturn("queue.pending.notification");
+        when(pendingProposal.getQueueToMsCreditAnalysis()).thenReturn("queue.pending.credit.analysis");
+        when(pendingProposal.getQueueToMsNotification()).thenReturn("queue.pending.notification");
         when(pendingProposal.getExchange()).thenReturn("exchange.pending.proposal");
 
         // Initialize config with mocked properties

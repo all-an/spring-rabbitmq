@@ -15,7 +15,7 @@ public class PendingProposalListener {
     @Autowired
     private SnsNotificationService snsNotificationService;
 
-    @RabbitListener(queues = "${rabbitmq.queue.pending.proposal}")
+    @RabbitListener(queues = "${rabbitmq.pendingproposal.queueToMsNotification}")
     public void pendingProposal(ProposalEntity proposal) {
         if (Objects.isNull(proposal)) {
             throw new IllegalArgumentException("Proposal is required");

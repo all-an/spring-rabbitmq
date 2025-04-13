@@ -15,17 +15,20 @@ public class FinishedProposalConfig {
 
     @Bean
     public Queue finishedProposalProposalQueue() {
-        return QueueBuilder.durable(properties.getFinishedproposal().getToMsProposal()).build();
+        return QueueBuilder.durable(properties.getFinishedproposal()
+                .getQueueToMsProposal()).build();
     }
 
     @Bean
     public Queue finishedProposalNotificationQueue() {
-        return QueueBuilder.durable(properties.getFinishedproposal().getToMsNotification()).build();
+        return QueueBuilder.durable(properties.getFinishedproposal()
+                .getQueueToMsNotification()).build();
     }
 
     @Bean
     public FanoutExchange finishedProposalExchange() {
-        return ExchangeBuilder.fanoutExchange(properties.getFinishedproposal().getExchange()).build();
+        return ExchangeBuilder.fanoutExchange(properties.getFinishedproposal()
+                .getExchange()).build();
     }
 
     @Bean

@@ -18,16 +18,16 @@ public class RabbitMQProperties {
     @Setter
     public static class PendingProposal {
         private String exchange;
-        private String toMsCreditAnalysis;
-        private String toMsNotification;
+        private String queueToMsCreditAnalysis;
+        private String queueToMsNotification;
     }
 
     @Getter
     @Setter
     public static class FinishedProposal {
         private String exchange;
-        private String toMsProposal;
-        private String toMsNotification;
+        private String queueToMsProposal;
+        private String queueToMsNotification;
     }
 
 }

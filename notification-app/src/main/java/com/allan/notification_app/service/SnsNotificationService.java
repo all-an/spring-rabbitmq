@@ -13,8 +13,8 @@ public class SnsNotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(SnsNotificationService.class);
 
-    @Autowired
-    private AmazonSNS amazonSNS;
+//    @Autowired
+//    private AmazonSNS amazonSNS;
 
     public void notify(String phone, String message) {
         if (phone == null || phone.trim().isEmpty()) {
@@ -26,10 +26,10 @@ public class SnsNotificationService {
             logger.error("Message content cannot be null or empty");
             throw new IllegalArgumentException("Message content cannot be null or empty");
         }
-        PublishRequest publishRequest = new PublishRequest()
-                .withMessage(message)
-                        .withPhoneNumber(phone);
-        amazonSNS.publish(publishRequest);
+//        PublishRequest publishRequest = new PublishRequest()
+//                .withMessage(message)
+//                        .withPhoneNumber(phone);
+//        amazonSNS.publish(publishRequest);
         logger.atLevel(Level.INFO).log("Message send: " + message);
     }
 

@@ -15,17 +15,20 @@ public class PendingProposalConfig {
 
     @Bean
     public Queue pendingProposalCreditAnalysisQueue() {
-        return QueueBuilder.durable(properties.getPendingproposal().getToMsCreditAnalysis()).build();
+        return QueueBuilder.durable(properties.getPendingproposal()
+                .getQueueToMsCreditAnalysis()).build();
     }
 
     @Bean
     public Queue pendingProposalNotificationQueue() {
-        return QueueBuilder.durable(properties.getPendingproposal().getToMsNotification()).build();
+        return QueueBuilder.durable(properties.getPendingproposal()
+                .getQueueToMsNotification()).build();
     }
 
     @Bean
     public FanoutExchange pendingProposalExchange() {
-        return ExchangeBuilder.fanoutExchange(properties.getPendingproposal().getExchange()).build();
+        return ExchangeBuilder.fanoutExchange(properties.getPendingproposal()
+                .getExchange()).build();
     }
 
     @Bean
