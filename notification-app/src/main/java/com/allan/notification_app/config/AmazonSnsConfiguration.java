@@ -10,26 +10,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//@Configuration
+@Configuration
 public class AmazonSnsConfiguration {
 
-//    @Value("${aws.acessKey}")
-//    private String acessKey;
-//
-//    @Value("${aws.secretKey}")
-//    private String secretKey;
-//
-//    @Bean
-//    public AWSCredentials awsCredentials() {
-//        return new BasicAWSCredentials(acessKey, secretKey);
-//    }
-//
-//    @Bean
-//    public AmazonSNS amazonSNS() {
-//        return AmazonSNSClientBuilder
-//                .standard()
-//                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials()))
-//                .withRegion(Regions.US_EAST_1)
-//                .build();
-//    }
+    @Value("${aws.acessKey}")
+    private String acessKey;
+
+    @Value("${aws.secretKey}")
+    private String secretKey;
+
+    @Bean
+    public AWSCredentials awsCredentials() {
+        return new BasicAWSCredentials(acessKey, secretKey);
+    }
+
+    @Bean
+    public AmazonSNS amazonSNS() {
+        return AmazonSNSClientBuilder
+                .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials()))
+                .withRegion(Regions.US_EAST_1)
+                .build();
+    }
 }
