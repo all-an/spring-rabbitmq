@@ -23,6 +23,6 @@ public class ProposalResponseDto {
 	
 	private Boolean wasApproved;
 	
-	private String observation;
+	private String statusMessage;
 
 }

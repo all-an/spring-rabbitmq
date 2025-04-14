@@ -16,7 +16,9 @@ public class PendingProposalConfig {
     @Bean
     public Queue pendingProposalCreditAnalysisQueue() {
         return QueueBuilder.durable(properties.getPendingproposal()
-                .getQueueToMsCreditAnalysis()).build();
+                .getQueueToMsCreditAnalysis())
+                .deadLetterExchange(properties.getDeadLetter()
+                        .getExchange()).build();
     }
 
     @Bean

@@ -48,7 +48,7 @@ public class ProposalConverter {
         dto.setWasApproved(proposalEntity.getWasApproved());
         dto.setProposalValue(numberFormatHelper.format(proposalEntity.getProposalValue())); // Injected dependency
         dto.setPaymentLimitInMonths(proposalEntity.getPaymentLimitInMonths());
-        dto.setObservation(proposalEntity.getObservation());
+        dto.setStatusMessage(proposalEntity.getStatusMessage());
 
         return dto;
     }

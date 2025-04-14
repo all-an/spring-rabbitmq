@@ -1,5 +1,6 @@
 package com.allan.credit_analysis_app.service.strategy.impl;
 
+import com.allan.credit_analysis_app.domain.AccountEntity;
 import com.allan.credit_analysis_app.domain.ProposalEntity;
 import com.allan.credit_analysis_app.service.strategy.CreditPointsCalculation;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class ScoreImplTest {
                 return 300;
             }
         };
-
+        dummyProposal.setAccountEntity(new AccountEntity());
         int points = calculation.calculatePoints(dummyProposal);
         assertThat(points).isEqualTo(150);
     }
@@ -45,6 +46,7 @@ public class ScoreImplTest {
             }
         };
 
+        dummyProposal.setAccountEntity(new AccountEntity());
         int points = calculation.calculatePoints(dummyProposal);
         assertThat(points).isEqualTo(180);
     }
@@ -58,6 +60,7 @@ public class ScoreImplTest {
             }
         };
 
+        dummyProposal.setAccountEntity(new AccountEntity());
         int points = calculation.calculatePoints(dummyProposal);
         assertThat(points).isEqualTo(220);
     }

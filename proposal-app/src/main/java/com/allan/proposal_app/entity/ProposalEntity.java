@@ -29,7 +29,7 @@ public class ProposalEntity {
 	@Column(columnDefinition = "boolean default true")
 	private boolean integrated;
 	
-	private String observation;
+	private String statusMessage;
 	
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "id_account")

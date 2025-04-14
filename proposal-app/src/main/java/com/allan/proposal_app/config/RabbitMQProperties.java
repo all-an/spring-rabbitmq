@@ -13,6 +13,7 @@ public class RabbitMQProperties {
 
     private PendingProposal pendingproposal;
     private FinishedProposal finishedproposal;
+    private DeadLetter deadLetter;
 
     @Getter
     @Setter
@@ -28,6 +29,13 @@ public class RabbitMQProperties {
         private String exchange;
         private String queueToMsProposal;
         private String queueToMsNotification;
+    }
+
+    @Getter
+    @Setter
+    public static class DeadLetter {
+        private String exchange;
+        private String queuePendingProposalDLQ;
     }
 
 }

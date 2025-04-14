@@ -17,7 +17,7 @@ public class ProposalEntity {
 
     private boolean integrated;
 
-    private String observation;
+    private String statusMessage;
 
     private AccountEntity accountEntity;
 
